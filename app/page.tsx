@@ -14,7 +14,7 @@ export default function Home() {
         transition={{ duration: 0.8 }}
       >
         Welcome to <span className="text-red-500 font-bold">Break</span>
-        <span className="font-medium">out</span>
+        <span className="font-medium">Bricks</span>
         {` Game`}
       </motion.h1>
 

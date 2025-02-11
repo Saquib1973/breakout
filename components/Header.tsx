@@ -6,7 +6,7 @@ const Header = () => {
     <div className="header-footer sticky top-0 left-0 bg-white">
       <Link href={'/'} className="text-2xl">
         <span className="underline  text-red-500 font-bold">Break</span>
-        <span className="underline fonte-medium">out</span>
+        <span className="underline fonte-medium">Bricks</span>
       </Link>
       <Link
         href={'/play'}

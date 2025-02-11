@@ -413,7 +413,6 @@ const BreakoutGame = () => {
     const storedScores = JSON.parse(localStorage.getItem('scores') || '[]')
     setScores(storedScores);
   }, [])
-  const [loading, setLoading] = useState(true);
   return (
     <div className="flex flex-col items-center w-full justify-center p-4">
       <div className="max-lg:flex hidden items-center justify-center w-full">
