@@ -14,6 +14,25 @@
   }
 }
 
+@layer components {
+  .header-footer {
+    @apply flex justify-between items-center max-w-4xl p-4 mx-auto py-3;
+  }
+  .min-h-window{
+    @apply min-h-[calc(100vh-120px)];
+  }
+  .transition {
+    @apply transition-all duration-300;
+  }
+  .button{
+    @apply px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-red-500 hover:text-white transition duration-300
+    /* flex gap-1 bg-gray-800 shadow-md shadow-gray-800 p-1 text-sm active:scale-95 transition-all duration-300 px-2 rounded-md items-center */
+  }
+  .button-light{
+    @apply px-6 py-3 bg-gray-100 text-black font-medium rounded-lg hover:bg-red-500 hover:text-white transition duration-300
+  }
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
