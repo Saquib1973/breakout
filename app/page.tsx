@@ -53,7 +53,7 @@ export default function Home() {
         <Link className="button-light" href="/play">
           Play Now
         </Link>
-        <Link className="button" href="https://github.com/your-repo">
+        <Link className="button" href="https://github.com/Saquib1973/breakout">
           GitHub
         </Link>
       </motion.div>
