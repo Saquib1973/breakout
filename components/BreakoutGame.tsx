@@ -13,6 +13,8 @@ import {
 } from './BreakoutGameTypes'
 
 const BreakoutGame = () => {
+  const [life, setLife] = useState<number>(0)
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const gameRef = useRef<GameType>({
     grid: 60,
@@ -173,7 +175,7 @@ const BreakoutGame = () => {
     player.width = game.grid * 2
     player.height = game.grid / 3
     player.score = 0
-    player.lives = 1
+    player.lives = life
 
     resetBall()
 
@@ -320,7 +322,7 @@ const BreakoutGame = () => {
     }
 
     if (game.gameover) {
-      output = `Game over, your score is ${player.score}`
+      output = `Game over, your score is ${player.score}. Click to restart`
       ctx.fillStyle = 'red'
     }
     ctx.fillText(output, canvas.width / 2, canvas.height - 20)
@@ -356,6 +358,7 @@ const BreakoutGame = () => {
       let keyz = keyzRef.current
       if (e.code in keyz) keyz[e.code] = true
       if (e.code === 'Space' && !game.inplay) {
+        e.preventDefault()
         game.inplay = true
         ball.dx = 1
         ball.dy = -1
@@ -407,36 +410,73 @@ const BreakoutGame = () => {
       canvas.removeEventListener('click', handleClick)
       cancelAnimationFrame(game.animate)
     }
-  }, [])
+  }, [life])
   const [scores, setScores] = useState<number[]>([])
   useEffect(() => {
     const storedScores = JSON.parse(localStorage.getItem('scores') || '[]')
-    setScores(storedScores);
+    setScores(storedScores)
   }, [])
+  console.log(life)
+  const [showCanvas, setShowCanvas] = useState(false)
+
+  const handleLifeSubmit = () => {
+    if (life > 0) {
+      setShowCanvas(true)
+    }
+  }
+
   return (
     <div className="flex flex-col items-center w-full justify-center p-4">
-      <div className="max-lg:flex hidden items-center justify-center w-full">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-red-500  px-6 py-3 text-lg font-semibold"
-        >
-          ⚠️ Not available on mobile/tablet devices. Please use a larger screen!
-        </motion.div>
-      </div>
+      {/* Input Screen */}
+      {!showCanvas && (
+        <div className="flex flex-col items-center justify-center">
+          <motion.form
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleLifeSubmit()
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="text-center"
+          >
+            <h1 className="text-2xl font-bold mb-4">Enter Number of Lives</h1>
+            <input
+              type="number"
+              name="lives"
+              id="lives"
+              onChange={(e) => setLife(Number(e.target.value))}
+              className="outline-none bg-gray-100 px-4 mx-2 p-2 rounded-lg"
+              placeholder="Number of lives"
+            />
+            <button type="submit" className="px-6 py-2 rounded-lg mt-4 button">
+              Start Game
+            </button>
+          </motion.form>
+        </div>
+      )}
 
-      <div className="p-4 max-lg:hidden flex items-center justify-center h-full">
+      {/* Canvas and Game Components */}
+      <div
+        className={`p-4 max-lg:hidden flex items-center justify-center h-full ${
+          !showCanvas ? 'hidden' : ''
+        }`}
+      >
         <motion.canvas
           ref={canvasRef}
           className="bg-gray-50 shadow-inner border w-auto rounded-md"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
         />
       </div>
 
-      <div className=" max-lg:hidden h-full px-4 flex flex-col  items-center py-4">
+      {/* Scoreboard */}
+      <div
+        className={`max-lg:hidden h-full px-4 flex flex-col items-center py-4 ${
+          !showCanvas ? 'hidden' : ''
+        }`}
+      >
         <h2 className="text-xl font-bold mb-2">🏆 Scoreboard</h2>
         <ul className="w-full text-center">
           {scores.length > 0 ? (
@@ -460,6 +500,18 @@ const BreakoutGame = () => {
             <p className="text-gray">No scores yet!</p>
           )}
         </ul>
+      </div>
+
+      {/* Mobile Warning */}
+      <div className="max-lg:flex hidden items-center justify-center w-full">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-red-500 px-6 py-3 text-lg font-semibold"
+        >
+          ⚠️ Not available on mobile/tablet devices. Please use a larger screen!
+        </motion.div>
       </div>
     </div>
   )
